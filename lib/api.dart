@@ -15,3 +15,13 @@ class test {
     );
   }
 }
+
+Future<dynamic> getData()  async {
+  var response = await http.post(Uri.http('scandiweb.veral.uz','site/login'),body: {
+    'username':'admin',
+    'password':'admin253'
+  });
+  var jsonData = jsonDecode(response.body);
+
+  print(jsonData);
+}
