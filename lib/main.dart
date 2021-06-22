@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app/pages/homepage.dart';
 import 'package:flutter_app/pages/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:file/local.dart';
@@ -59,8 +60,9 @@ class _MainPageState extends State<MainPage> {
           ),
         ],
       ),
-      body: Center(child: Text("Main Page")),
+      body: MyHomePage(),
       drawer: Drawer(),
     );
   }
 }
+
