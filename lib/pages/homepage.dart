@@ -1,7 +1,30 @@
 import 'dart:convert';
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_app/models/saleModel.dart';
 import 'package:http/http.dart' as http;
+
+
+Future<List<Sales>> fetchAlbum() async {
+  try {
+    final http.Response response = await http.get(
+        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory')
+    );
+
+    if (response.statusCode == 200) {
+      // print(jsonDecode(response.body));
+          return Sales.fetchData(jsonList: jsonDecode(response.body));
+    }
+
+    else {
+      throw Exception('Failed to load sales');
+    }
+
+  }catch(e) {
+    print(e);
+  }
+}
+
 
 class MyHomePage extends StatefulWidget {
   final String title;
@@ -13,19 +36,19 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   Future<List<Sales>> futureAlbum;
+
   @protected
   void initState() {
     super.initState();
     futureAlbum = fetchAlbum();
+
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Spector'),
-      ),
+
       body: Center(
         child: FutureBuilder<List<Sales>>(
           future: futureAlbum,
@@ -33,17 +56,20 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.hasData) {
               return ListView.builder(
                   itemCount: snapshot.data.length,
+                  // physics: Scrollable.of(context),
+                  shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return Row(
+                    return Column(
                       children: [
-
-                        Text(
-                            "id = ${snapshot.data[index].Id}"
+                        Card(
+                            child: ListTile(
+                                title: Text(snapshot.data[index].name),
+                              subtitle:Text(snapshot.data[index].time),
+                              trailing:Text(snapshot.data[index].Id),
+                            )
                         ),
 
-                        Text(
-                            " time = ${snapshot.data[index].time}"
-                        ),
+
                       ],
                     );
                   }
@@ -56,56 +82,14 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-      drawer: Drawer(
-        child: ListView(
 
-        ),
-      ),
     );
 
   }
 }
 
-class Sales {
-  final String Id;
-  final String time;
-
-  Sales({this.Id, this.time});
-
-  factory Sales.fromJson({Map<String, dynamic> json}) {
-    return Sales(
-        Id: json['id'].toString(),
-        time:json['time'].toString()
-    );
-  }
-
-  static List<Sales> fetchData({List jsonList}) {
-    List<Sales> list = [];
-
-    for (int i = 0; i < jsonList.length; i++) {
-      list.add(Sales.fromJson(json: jsonList[i]));
-    }
-
-    return list;
-  }
-}
 
 
-Future<List<Sales>> fetchAlbum() async {
-  try {
-    final http.Response response = await http.get(
-        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales')
-    );
 
-    if (response.statusCode == 200) {
-      return Sales.fetchData(jsonList: jsonDecode(response.body));
-    }
-    else {
-      throw Exception('Failed to load sales');
-    }
-  }catch(e) {
-    print(e);
-  }
-}
 // Developer Tolkinov Muhammed
 // Email: tolkinov1999@gmail.com
