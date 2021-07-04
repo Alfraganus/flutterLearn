@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/models/saleModel.dart';
 import 'package:http/http.dart' as http;
 
+import 'finishedSale.dart';
+
 
 Future<List<Sales>> fetchAlbum() async {
   try {
@@ -63,9 +65,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       children: [
                         Card(
                             child: ListTile(
-                                title: Text(snapshot.data[index].name),
-                              subtitle:Text(snapshot.data[index].time),
-                              trailing:Text(snapshot.data[index].Id),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => FinishedSale(id:snapshot.data[index].Id)),
+                            );
+                          },
+                          title: Text(snapshot.data[index].name),
+                              subtitle:Text(snapshot.data[index].time.toString()),
+                              trailing:Text(snapshot.data[index].Id.toString()),
                             )
                         ),
 
