@@ -12,12 +12,10 @@ Future<List<Sales>> fetchAlbum() async {
     final http.Response response = await http.get(
         Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory')
     );
-
     if (response.statusCode == 200) {
       // print(jsonDecode(response.body));
           return Sales.fetchData(jsonList: jsonDecode(response.body));
     }
-
     else {
       throw Exception('Failed to load sales');
     }
@@ -43,7 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     futureAlbum = fetchAlbum();
-
   }
 
   @override
