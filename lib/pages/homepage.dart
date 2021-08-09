@@ -3,17 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/models/saleModel.dart';
 import 'package:http/http.dart' as http;
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'finishedSale.dart';
-
 
 Future<List<Sales>> fetchAlbum() async {
   try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     final http.Response response = await http.get(
-        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory')
+        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory&user_id=19&session_user=${prefs.getString('token')}')
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
+      // print('the body is '+(response.body));
           return Sales.fetchData(jsonList: jsonDecode(response.body));
     }
     else {
@@ -29,7 +29,6 @@ Future<List<Sales>> fetchAlbum() async {
 class MyHomePage extends StatefulWidget {
   final String title;
   MyHomePage({Key key, this.title}) :super (key: key);
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -41,6 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     futureAlbum = fetchAlbum();
+    // user_id = _loadCounter().toString();
+    // print('user_id: '+user_id);
   }
 
   @override
@@ -74,8 +75,6 @@ class _MyHomePageState extends State<MyHomePage> {
                               trailing:Text(snapshot.data[index].Id.toString()),
                             )
                         ),
-
-
                       ],
                     );
                   }
@@ -88,9 +87,7 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
       ),
-
     );
-
   }
 }
 
