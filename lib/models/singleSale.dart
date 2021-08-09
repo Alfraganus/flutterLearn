@@ -8,7 +8,7 @@ class SingleSale {
   factory SingleSale.fromJson({Map<dynamic, dynamic> json}) {
     return SingleSale(
         name:json['productCategory']['name'].toString(),
-        price:json['price'],
+        price:json['price_id'],
         quantity:json['quantity']
     );
   }

@@ -9,7 +9,7 @@ class Sales {
   factory Sales.fromJson({Map<dynamic, dynamic> json}) {
     final DateTime timeStamp = DateTime.fromMillisecondsSinceEpoch(json['time']);
     return Sales(
-        Id: json['id'],
+        Id: json['sale_id'],
         time:timeStamp,
         name:json['productCategory']['name'].toString()
     );
