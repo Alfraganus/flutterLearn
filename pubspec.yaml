@@ -21,11 +21,12 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
+  searchable_dropdown:
   flutter:
     sdk: flutter
   http: ^0.13.1
   shared_preferences: any
-
+  dropdownfield: 1.0.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

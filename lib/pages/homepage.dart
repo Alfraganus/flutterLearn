@@ -5,6 +5,7 @@ import 'package:flutter_app/models/saleModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'finishedSale.dart';
+import 'sale_form.dart';
 
 Future<List<Sales>> fetchAlbum() async {
   try {
@@ -46,38 +47,53 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-
       body: Center(
         child: FutureBuilder<List<Sales>>(
           future: futureAlbum,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data.length,
-                  // physics: Scrollable.of(context),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        Card(
-                            child: ListTile(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => FinishedSale(id:snapshot.data[index].Id)),
-                            );
-                          },
-                          title: Text(snapshot.data[index].name),
-                              subtitle:Text(snapshot.data[index].time.toString()),
-                              trailing:Text(snapshot.data[index].Id.toString()),
-                            )
-                        ),
-                      ],
-                    );
-                  }
+              return Column(
+                children: [
+                  RaisedButton(
+                    color: Colors.blue, // background
+                    textColor: Colors.white, // foreground
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SaleForm()),
+                      );
+                    },
+                    child: Text('Yangi savdo kiritish'),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: snapshot.data.length,
+                        // physics: Scrollable.of(context),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              Card(
+                                  child: ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => FinishedSale(id:snapshot.data[index].Id)),
+                                  );
+                                },
+                                title: Text(snapshot.data[index].name),
+                                    subtitle:Text(snapshot.data[index].time.toString()),
+                                    trailing:Text(snapshot.data[index].Id.toString()),
+                                  )
+                              ),
+                            ],
+                          );
+                        }
+                    ),
+                  ),
+                ],
               );
             }
             else if (snapshot.hasError) {
