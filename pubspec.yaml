@@ -25,6 +25,8 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.13.1
+  flutter_typeahead: ^3.0.0-nullsafety.0
+  faker: ^2.0.0-rc.2
   shared_preferences: any
   dropdownfield: 1.0.0
   # The following adds the Cupertino Icons font to your application.
