@@ -28,7 +28,7 @@ class UserApi {
 
         return nameLower.contains(queryLower);
       }).toList();
-    } else {
+    } else  {
       throw Exception();
     }
   }
