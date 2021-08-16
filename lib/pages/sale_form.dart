@@ -66,7 +66,6 @@ class _ProductFormState extends State<ProductForm> {
 
 
 
-
 class NetworkTypeAheadPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
