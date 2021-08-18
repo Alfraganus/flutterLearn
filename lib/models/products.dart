@@ -42,3 +42,49 @@ Future<List<Products>> getProducts() async {
     print(e);
   }
 }
+
+
+
+/*getting prices and leftovers*/
+
+class Stock {
+  final String quantity;
+  final String price;
+
+  Stock({this.quantity,this.price});
+
+  factory Stock.fromJson({Map<dynamic, dynamic> json}) {
+    return Stock(
+      quantity:json['quantity'],
+      price:['price'].toString(),
+    );
+  }
+
+  static List<Products> fetchData({List jsonList}) {
+    List<Products> list = [];
+    for (int i = 0; i < jsonList.length; i++) {
+      list.add(Products.fromJson(json: jsonList[i]));
+    }
+    return list;
+  }
+
+}
+
+
+Future<List<Products>> getStock(url) async {
+  try {
+    final http.Response response = await http.get(
+        Uri.parse(url)
+    );
+    if (response.statusCode == 200) {
+      // print('the body is '+(response.body));
+      return Stock.fetchData(jsonList: jsonDecode(response.body));
+    }
+    else {
+      throw Exception('Failed to load sales');
+    }
+
+  }catch(e) {
+    print(e);
+  }
+}
