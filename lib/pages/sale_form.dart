@@ -14,15 +14,6 @@ String quantity = '';
 String price = '';
 dynamic test = '';
 
-
-Future<void> getUser() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  test = prefs.getString('token');
-}
-
-
-
-
 class ProductForm extends StatefulWidget {
 
   @override
@@ -30,6 +21,17 @@ class ProductForm extends StatefulWidget {
 }
 
 class _ProductFormState extends State<ProductForm> {
+
+  static readPrefStr(dynamic key) async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    print( pref.getString(key));
+  }
+
+  @override
+  void initState() {
+    readPrefStr('token');
+    super.initState();
+  }
 
 
   @override
@@ -45,7 +47,6 @@ class _ProductFormState extends State<ProductForm> {
           Text('Productid :'+product_id),
           Text('quantity :'+quantity),
           Text('price :'+price),
-          Text('token :'+test),
           SafeArea(
             child: Container(
               padding: EdgeInsets.all(16),
