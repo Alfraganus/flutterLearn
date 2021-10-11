@@ -1,17 +1,37 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app/main.dart';
 import 'package:flutter_app/models/products.dart';
 import 'package:flutter_app/models/userApi.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 dynamic product = 'Search product';
 String product_id = '';
+String quantity = '';
+String price = '';
+dynamic test = '';
+
+
+Future<void> getUser() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  test = prefs.getString('token');
+}
+
+
+
+
 class ProductForm extends StatefulWidget {
+
   @override
   _ProductFormState createState() => _ProductFormState();
 }
 
 class _ProductFormState extends State<ProductForm> {
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +41,11 @@ class _ProductFormState extends State<ProductForm> {
       body:
       Column(
         children: [
+          Padding(padding:  EdgeInsets.all(16)),
           Text('Productid :'+product_id),
+          Text('quantity :'+quantity),
+          Text('price :'+price),
+          Text('token :'+test),
           SafeArea(
             child: Container(
               padding: EdgeInsets.all(16),
@@ -61,12 +85,46 @@ class _ProductFormState extends State<ProductForm> {
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
                     ..showSnackBar(SnackBar(
-                      content: Text('Selected user: ${user.name}'),
+                      content: Text('Selected product: ${user.name}'),
                     ));
                 },
               ),
             ),
           ),
+      SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: TextField(
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.all(16),
+                border: OutlineInputBorder(),
+                hintText: 'Enter quantity'
+            ),
+            onChanged: (text) {
+              quantity = text;
+            },
+          ),
+        ),
+      ),
+          SafeArea(
+            child: Container(
+              padding: EdgeInsets.all(16),
+              child: TextField(
+                decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(16),
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter price'
+                ),
+                onChanged: (text) {
+                  price = text;
+                },
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text('Send'),
+          )
         ],
       ),
 

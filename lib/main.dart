@@ -6,9 +6,21 @@ import 'package:http/http.dart' as http;
 import 'package:file/local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+
+  // Note that this line is required, otherwise flutter throws an error
+  // about using binary messenger before runApp()
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  runApp(new MyApp(sharedPref));
+}
+
 
 class MyApp extends StatelessWidget {
+  final SharedPreferences sharedPref;
+  MyApp(this.sharedPref);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,6 +43,10 @@ class _MainPageState extends State<MainPage> {
 
   SharedPreferences sharedPreferences;
 
+  set token(String token) {
+    this.token = token;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -41,6 +57,8 @@ class _MainPageState extends State<MainPage> {
     sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
+    } else {
+      token =  sharedPreferences.getString("token");
     }
   }
 
