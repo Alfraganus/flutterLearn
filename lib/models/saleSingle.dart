@@ -1,6 +1,8 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class SingleSale {
   String name;
@@ -25,6 +27,22 @@ Future<void> getNews() async{
       sale.add(single);
     });
   }
+}
+
+
+CreateProduct(String username, pass) async {
+  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  Map data = {
+    'username': username,
+    'password': pass
+  };
+  var jsonResponse = null;
+  var response = await http.post(Uri.http('api.spector77.uz','rest/sales/login'), body: data);
+  if(response.statusCode == 200) {
+    jsonResponse = json.decode(response.body);
+
+  }
+
 }
 
 
