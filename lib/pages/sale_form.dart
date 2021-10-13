@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/models/Product.dart';
 import 'package:flutter_app/models/products.dart';
 import 'package:flutter_app/models/userApi.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -12,11 +13,7 @@ dynamic product = 'Search product';
 String product_id = '';
 
 dynamic test = '';
-
-final List<String> products = <String>[];
-final List<String> quantity = <String>[];
-final List<String> price = <String>[];
-final List<int> msgCount = <int>[2, 0, 10, 6, 52, 4, 0, 2];
+List<Product> newproducts = [];
 
 class ProductForm extends StatefulWidget {
   @override
@@ -31,10 +28,14 @@ class _ProductFormState extends State<ProductForm> {
 
   void addItemToList(){
     setState(() {
-      products.insert(0,product);
-      price.insert(0,priceController.text);
-      quantity.insert(0,quantityController.text);
-      msgCount.insert(0, 0);
+      newproducts.add(Product
+        (
+        product_name:product,
+        quantity:quantityController.text,
+        price:priceController.text,
+      )
+      );
+
     });
   }
 
@@ -131,22 +132,42 @@ class _ProductFormState extends State<ProductForm> {
             child: Text('Send'),
           ),
           Flexible(
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: products.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-                    margin: EdgeInsets.all(2),
-                    color: msgCount[index]>=10? Colors.blue[400]:
-                    msgCount[index]>3? Colors.blue[100]: Colors.grey,
-                    child: Center(
-                        child: Text('product:' +'${products[index]} price: (${price[index]}) quantity: (${quantity[index]})',
-                          style: TextStyle(fontSize: 18),
-                        )
-                    ),
-                  );
-                }
-            ),
+            child:SingleChildScrollView(
+              child: Container(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: newproducts.map((personone){
+                    return Container(
+                      child: Card(
+                        child:ListTile(
+                          title: Text(personone.product_name),
+                          subtitle: Text(personone.price + "\n" + personone.quantity),
+                          trailing: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                primary: Colors.redAccent
+                            ),
+                            child: Icon(Icons.delete),
+                            onPressed: (){
+                              //delete action for this button
+                              newproducts.removeWhere((element){
+                                return element.product_name == personone.product_name;
+                              }); //go through the loop and match content to delete from list
+                              setState(() {
+                                product = '';
+                                priceController.text = '';
+                                quantityController.text = '';
+                                //refresh UI after deleting element from list
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+
+                    );
+                  }).toList(),
+                ),
+              ),
+            ) ,
           )
         ],
       ),

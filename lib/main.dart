@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:file/local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
+void main(){runApp(MyApp());}
 
 class MyApp extends StatelessWidget {
 
@@ -31,11 +31,7 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
 
   SharedPreferences sharedPreferences;
-
-  set token(String token) {
-    this.token = token;
-  }
-
+  String token = '';
   @override
   void initState() {
     super.initState();
