@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_app/models/products.dart';
 import 'package:flutter_app/models/userApi.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:http/http.dart' as http;
 
 dynamic product = 'Search product';
 String product_id = '';
@@ -28,15 +29,20 @@ class _ProductFormState extends State<ProductForm> {
 
   void addItemToList(){
     setState(() {
-      newproducts.add(Product
-        (
+      newproducts.add(Product(
         product_name:product,
         quantity:quantityController.text,
         price:priceController.text,
       )
       );
-
     });
+  }
+
+ void sendProducts() async {
+    String products = jsonEncode(newproducts);
+  await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: newproducts);
+     print(jsonEncode(newproducts));
+
   }
 
   @override
@@ -168,7 +174,13 @@ class _ProductFormState extends State<ProductForm> {
                 ),
               ),
             ) ,
-          )
+          ),
+          TextButton(
+            onPressed: () {
+              sendProducts();
+            },
+            child: Text('Send to API'),
+          ),
         ],
       ),
 
