@@ -12,7 +12,6 @@ import 'package:http/http.dart' as http;
 
 dynamic product = 'Search product';
 String product_id = '';
-
 dynamic test = '';
 List<Product> newproducts = [];
 
@@ -29,6 +28,7 @@ class _ProductFormState extends State<ProductForm> {
 
   void addItemToList(){
     setState(() {
+      var model = Product(product_name: product,price: 'price',quantity:quantityController.text);
       newproducts.add(Product(
         product_name:product,
         quantity:quantityController.text,
@@ -39,9 +39,10 @@ class _ProductFormState extends State<ProductForm> {
   }
 
  void sendProducts() async {
-    String products = jsonEncode(newproducts);
-  await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: newproducts);
-     print(jsonEncode(newproducts));
+
+ var response = await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: json.encoder.convert(newproducts));
+   print(response.body);
+   // print(jsonEncode(newproducts));
 
   }
 

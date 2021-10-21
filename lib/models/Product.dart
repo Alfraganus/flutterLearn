@@ -1,6 +1,8 @@
 class Product {
       String product_name, quantity, price;
-      Product({this.product_name, this.quantity, this.price});
+      Product({this.product_name, this.quantity, this.price,this.productList});
+
+      List<Product> productList;
 
       @override
       toString() {
@@ -14,4 +16,5 @@ class Product {
                   'price': price,
             };
       }
+
 }
