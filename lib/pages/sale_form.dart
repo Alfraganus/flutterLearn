@@ -14,6 +14,8 @@ dynamic product = 'Search product';
 String product_id = '';
 dynamic test = '';
 List<Product> newproducts = [];
+String sharedPrefs;
+
 
 class ProductForm extends StatefulWidget {
   @override
@@ -26,13 +28,23 @@ class _ProductFormState extends State<ProductForm> {
   TextEditingController quantityController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() => sharedPrefs = prefs.get('token'));
+    });
+  }
+
+
   void addItemToList(){
     setState(() {
-      var model = Product(product_name: product,price: 'price',quantity:quantityController.text);
       newproducts.add(Product(
-        product_name:product,
+        product_name:product_id,
         quantity:quantityController.text,
         price:priceController.text,
+        user_id: sharedPrefs
       )
       );
     });
@@ -41,7 +53,7 @@ class _ProductFormState extends State<ProductForm> {
  void sendProducts() async {
 
  var response = await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: json.encoder.convert(newproducts));
-   print(response.body);
+   print(json.encoder.convert(newproducts));
    // print(jsonEncode(newproducts));
 
   }
