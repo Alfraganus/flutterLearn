@@ -10,12 +10,21 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-dynamic product = 'Search product';
+import 'homepage.dart';
+
+dynamic product = 'Search a product';
 String product_id = '';
+String product_name = '';
 dynamic test = '';
 List<Product> newproducts = [];
 String sharedPrefs;
 
+
+void emptyDatas()
+{
+  product = 'Search a product';
+  newproducts =[];
+}
 
 class ProductForm extends StatefulWidget {
   @override
@@ -38,23 +47,22 @@ class _ProductFormState extends State<ProductForm> {
   }
 
 
-  void addItemToList(){
+  void addItemToList() {
     setState(() {
       newproducts.add(Product(
-        product_name:product_id,
-        quantity:quantityController.text,
-        price:priceController.text,
-        user_id: sharedPrefs
-      )
-      );
+          product_name: product_name,
+          product_id: product_id,
+          quantity: quantityController.text,
+          price: priceController.text,
+          user_id: sharedPrefs));
     });
   }
 
  void sendProducts() async {
 
  var response = await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: json.encoder.convert(newproducts));
-   print(json.encoder.convert(newproducts));
-   // print(jsonEncode(newproducts));
+   // print(json.encoder.convert(newproducts));
+   print(newproducts);
 
   }
 
@@ -105,7 +113,7 @@ class _ProductFormState extends State<ProductForm> {
                   final user = suggestion;
                   // getStock('sql query api');
                   setState(() {
-                    product = '${user.name}';
+                    product_name = product = '${user.name}';
                     product_id = '${user.id}';
                   });
                   ScaffoldMessenger.of(context)
@@ -191,6 +199,11 @@ class _ProductFormState extends State<ProductForm> {
           TextButton(
             onPressed: () {
               sendProducts();
+              emptyDatas();
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+              );
             },
             child: Text('Send to API'),
           ),
@@ -201,7 +214,3 @@ class _ProductFormState extends State<ProductForm> {
     );
   }
 }
-
-
-
-//list qilib localda saqlab olish kerak, kegin jonatiladi

@@ -11,7 +11,7 @@ Future<List<Sales>> fetchAlbum() async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final http.Response response = await http.get(
-        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory&user_id=19&session_user=${prefs.getString('token')}')
+        Uri.parse('https://api.spector77.uz/rest/sales/finished-sales?expand=productCategory&user_id=${prefs.getString('token')}')
     );
     if (response.statusCode == 200) {
       // print('the body is '+(response.body));
