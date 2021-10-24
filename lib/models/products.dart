@@ -28,7 +28,7 @@ class Products {
 Future<List<Products>> getProducts() async {
   try {
     final http.Response response = await http.get(
-        Uri.parse('https://api.spector77.uz/rest/sales/products')
+        Uri.parse('https://api.spector77.uz/rest/sales/products?expand=productPrice')
     );
     if (response.statusCode == 200) {
       // print('the body is '+(response.body));

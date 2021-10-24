@@ -18,7 +18,8 @@ String product_name = '';
 dynamic test = '';
 List<Product> newproducts = [];
 String sharedPrefs;
-
+String product_price = '';
+String product_quantity = '';
 
 void emptyDatas()
 {
@@ -76,7 +77,8 @@ class _ProductFormState extends State<ProductForm> {
       Column(
         children: [
           Padding(padding:  EdgeInsets.all(16)),
-
+      Text('Pruduct price: '+product_price+' so\'m'),
+      Text('Product quantity left: '+product_quantity),
           SafeArea(
             child: Container(
               padding: EdgeInsets.all(16),
@@ -115,6 +117,8 @@ class _ProductFormState extends State<ProductForm> {
                   setState(() {
                     product_name = product = '${user.name}';
                     product_id = '${user.id}';
+                    product_price = '${user.price}';
+                    // product_quantity ='${user.quantity}';
                   });
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()

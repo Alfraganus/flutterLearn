@@ -4,21 +4,27 @@ import 'package:http/http.dart' as http;
 class User {
   final String name;
   final String id;
+  final String price;
+  final String quantity;
 
   const User({
     this.name,
     this.id,
+    this.price,
+    this.quantity
   });
 
   static User fromJson(Map<String, dynamic> json) => User(
     name: json['name'],
     id: json['id'].toString(),
+    price: json['productPrice']['price'].toString(),
+    quantity: json['productQuantity']['quantity'].toString(),
   );
 }
 
 class UserApi {
   static Future<List<User>> getUserSuggestions(String query) async {
-    final url = Uri.parse('https://api.spector77.uz/rest/sales/products');
+    final url = Uri.parse('https://api.spector77.uz/rest/sales/products?expand=productQuantity,productPrice');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
