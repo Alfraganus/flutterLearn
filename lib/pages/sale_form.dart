@@ -196,7 +196,7 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ) ,
           ),
-          TextButton(
+          newproducts.length>0? TextButton(
             onPressed: () {
               sendProducts();
               emptyDatas();
@@ -206,7 +206,7 @@ class _ProductFormState extends State<ProductForm> {
               );
             },
             child: Text('Send to API'),
-          ),
+          ) :Text('')
         ],
       ),
 
