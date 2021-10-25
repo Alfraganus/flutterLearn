@@ -5,26 +5,27 @@ class User {
   final String name;
   final String id;
   final String price;
-  final String quantity;
+  final String leftquantity;
 
   const User({
     this.name,
     this.id,
     this.price,
-    this.quantity
+    this.leftquantity
   });
 
   static User fromJson(Map<String, dynamic> json) => User(
     name: json['name'],
     id: json['id'].toString(),
-    price: json['productPrice']['price'].toString(),
-    quantity: json['productQuantity']['quantity'].toString(),
+    price: json['product_price'].toString(),
+    leftquantity: json['product_quantity'].toString(),
   );
+
 }
 
 class UserApi {
   static Future<List<User>> getUserSuggestions(String query) async {
-    final url = Uri.parse('https://api.spector77.uz/rest/sales/products?expand=productQuantity,productPrice');
+    final url = Uri.parse('https://api.spector77.uz/rest/sales/products');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
