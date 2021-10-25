@@ -9,6 +9,7 @@ import 'package:flutter_app/models/userApi.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:connectivity/connectivity.dart';
 
 import 'homepage.dart';
 
@@ -27,6 +28,8 @@ void emptyDatas()
   newproducts =[];
 }
 
+
+
 class ProductForm extends StatefulWidget {
   @override
   _ProductFormState createState() => _ProductFormState();
@@ -42,6 +45,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   void initState() {
     super.initState();
+    _checkInternetConnection();
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs.get('token'));
     });
@@ -158,7 +162,21 @@ class _ProductFormState extends State<ProductForm> {
           ),
           TextButton(
             onPressed: () {
-              addItemToList();
+             if(product_id !='' || quantityController.text != '' || priceController.text != '') {
+               addItemToList();
+               product_id='';
+               product = 'Search a product';
+               quantityController.text='';
+               priceController.text='';
+             } else {
+               showDialog(
+                 context: context,
+                 builder: (BuildContext context) {
+                   return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
+                 },
+               );
+
+            }
             },
             child: Text('Send'),
           ),
@@ -213,8 +231,38 @@ class _ProductFormState extends State<ProductForm> {
           ) :Text('')
         ],
       ),
-
-
     );
   }
+
+  _showDialog(title,text) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return   AlertDialog(
+          title: Text(title),
+          content: Text(text),
+        );;
+      },
+    );
+  }
+
+  _checkInternetConnection() async {
+    var result = await Connectivity().checkConnectivity();
+    if(result == ConnectivityResult.none) {
+      _showDialog('Xatolik bor!','Internet mavjud emas!');
+    } else if(result == ConnectivityResult.wifi) {
+      _showDialog('Xatolik yoq!','Internet wifi!');
+    }
+    else if(result == ConnectivityResult.mobile) {
+      _showDialog('Xatolik yoq!','Internet mobilniki!');
+    }
+  }
+
+
 }
+
+
+
+
+
+
