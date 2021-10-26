@@ -59,7 +59,7 @@ class _MainPageState extends State<MainPage> {
               sharedPreferences.commit();
               Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => LoginPage()), (Route<dynamic> route) => false);
             },
-            child: Text("Log Out", style: TextStyle(color: Colors.white)),
+            child: Text("Tizimdan chiqish", style: TextStyle(color: Colors.white)),
           ),
         ],
       ),

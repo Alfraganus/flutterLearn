@@ -12,7 +12,8 @@ Future<List<SingleSale>> fetchAlbums(String url) async {
     );
     print(jsonDecode(response.body));
     if (response.statusCode == 200) {
-      return SingleSale.fetchData(jsonList: jsonDecode(response.body));
+      _email = jsonDecode(response.body)['saleOverallSum'];
+      return SingleSale.fetchData(jsonList: jsonDecode(response.body)['sales']);
     }
     else {
       throw Exception('Failed to load sales');
@@ -39,15 +40,8 @@ class _FinishedSaleState extends State<FinishedSale> {
   @protected
   void initState() {
     futureAlbum = fetchAlbums('https://api.spector77.uz/rest/sales/single-sale?expand=productCategory&sale_id=${widget.id}');
-    _loadCounter();
+
     super.initState();
-  }
-  _loadCounter() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _email = (prefs.getString('token')??'');
-      print(_email);
-    });
   }
 
   @override
@@ -65,17 +59,19 @@ class _FinishedSaleState extends State<FinishedSale> {
               return ListView.builder(
                   itemCount: snapshot.data.length,
                   // physics: Scrollable.of(context),
-                  shrinkWrap: true,
+                  shrinkWrap:true,
                   itemBuilder: (context, index) {
                     return Column(
                       children: [
                         Card(
                             child: ListTile(
+                              leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
                               title: Text(snapshot.data[index].name),
-                              subtitle:Text(snapshot.data[index].price.toString()+' so\'m'),
-                              trailing:Text(snapshot.data[index].quantity.toString()+' dona'),
-                            )
+                              trailing:Text(snapshot.data[index].price.toString()+' so\'m'),
+                              subtitle:Text(snapshot.data[index].quantity.toString()+' dona'),
+                            ),
                         ),
+Text('test '+_email),
                       ],
                     );
                   }

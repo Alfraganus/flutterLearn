@@ -53,17 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.hasData) {
               return Column(
                 children: [
-                  RaisedButton(
-                    color: Colors.blue, // background
-                    textColor: Colors.white, // foreground
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProductForm()),
-                      );
-                    },
-                    child: Text('Yangi savdo kiritish'),
-                  ),
                   Expanded(
                     child: ListView.builder(
                         itemCount: snapshot.data.length,
@@ -83,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                 },
                                    leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
                                     title: Text(snapshot.data[index].name),
-                                    subtitle:Text('Sana: '+snapshot.data[index].time.toString()),
+                                    subtitle:Text(snapshot.data[index].time.toString()),
                                     trailing:Text(snapshot.data[index].overall_sale.toString()+' so\'m'),
                                   )
                               ),
@@ -101,6 +90,19 @@ class _MyHomePageState extends State<MyHomePage> {
             return CircularProgressIndicator();
           },
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProductForm()),
+          );
+        },
+        label: const Text('Yangi savdo qilish'),
+        icon: const Icon(Icons.add_circle),
+        backgroundColor: Colors.green,
+        foregroundColor: Colors.white,
+
       ),
     );
   }
