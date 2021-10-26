@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:html';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/models/Product.dart';
 import 'package:flutter_app/models/products.dart';
@@ -45,7 +46,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   void initState() {
     super.initState();
-    _checkInternetConnection();
+
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs.get('token'));
     });
@@ -138,6 +139,8 @@ class _ProductFormState extends State<ProductForm> {
           padding: EdgeInsets.all(16),
           child: TextField(
             controller: quantityController,
+            keyboardType: TextInputType.number,
+            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
             decoration: const InputDecoration(
               contentPadding: EdgeInsets.all(16),
                 border: OutlineInputBorder(),
@@ -151,6 +154,8 @@ class _ProductFormState extends State<ProductForm> {
               padding: EdgeInsets.all(16),
               child: TextField(
                 controller: priceController,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(16),
                     border: OutlineInputBorder(),
@@ -162,19 +167,14 @@ class _ProductFormState extends State<ProductForm> {
           ),
           TextButton(
             onPressed: () {
-             if(product_id !='' || quantityController.text != '' || priceController.text != '') {
+             if(product_id =='' || quantityController.text ==''  || priceController.text =='' ) {
+               return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
+             } else {
                addItemToList();
                product_id='';
                product = 'Search a product';
                quantityController.text='';
                priceController.text='';
-             } else {
-               showDialog(
-                 context: context,
-                 builder: (BuildContext context) {
-                   return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
-                 },
-               );
 
             }
             },
@@ -220,12 +220,17 @@ class _ProductFormState extends State<ProductForm> {
           ),
           newproducts.length>0? TextButton(
             onPressed: () {
-              sendProducts();
-              emptyDatas();
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-              );
+              if(_checkInternetConnection() !=200 ) {
+                sendProducts();
+                emptyDatas();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                );
+              } else {
+                _showDialog('Xatolik bor!','Internet mavjud emas!');
+              }
+
             },
             child: Text('Send to API'),
           ) :Text('')
@@ -249,13 +254,11 @@ class _ProductFormState extends State<ProductForm> {
   _checkInternetConnection() async {
     var result = await Connectivity().checkConnectivity();
     if(result == ConnectivityResult.none) {
-      _showDialog('Xatolik bor!','Internet mavjud emas!');
-    } else if(result == ConnectivityResult.wifi) {
-      _showDialog('Xatolik yoq!','Internet wifi!');
+      return 200;
+    }  else {
+      return 404;
     }
-    else if(result == ConnectivityResult.mobile) {
-      _showDialog('Xatolik yoq!','Internet mobilniki!');
-    }
+
   }
 
 

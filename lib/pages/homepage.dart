@@ -41,8 +41,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     futureAlbum = fetchAlbum();
-    // user_id = _loadCounter().toString();
-    // print('user_id: '+user_id);
   }
 
   @override
@@ -83,9 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                         builder: (context) => FinishedSale(id:snapshot.data[index].Id)),
                                   );
                                 },
-                                title: Text(snapshot.data[index].name),
-                                    subtitle:Text(snapshot.data[index].time.toString()),
-                                    trailing:Text(snapshot.data[index].Id.toString()),
+                                   leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
+                                    title: Text(snapshot.data[index].name),
+                                    subtitle:Text('Sana: '+snapshot.data[index].time.toString()),
+                                    trailing:Text(snapshot.data[index].overall_sale.toString()+' so\'m'),
                                   )
                               ),
                             ],

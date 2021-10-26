@@ -1,17 +1,17 @@
 class Sales {
   final int Id;
-  final DateTime time;
+  final String time;
   final String name;
+  final String overall_sale;
 
-  Sales({this.Id, this.time,this.name});
-  var dateUtc = DateTime.now().toLocal();
+  Sales({this.Id, this.time,this.name,this.overall_sale});
 
   factory Sales.fromJson({Map<dynamic, dynamic> json}) {
-    final DateTime timeStamp = DateTime.fromMillisecondsSinceEpoch(json['time']);
     return Sales(
         Id: json['sale_id'],
-        time:timeStamp,
-        name:json['productCategory']['name'].toString()
+        time:json['normal_time'].toString(),
+        name:json['productCategory']['name'].toString(),
+        overall_sale:json['overall_sale'].toString()
     );
   }
 
