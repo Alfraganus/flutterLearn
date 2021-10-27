@@ -70,7 +70,7 @@ class _FinishedSaleState extends State<FinishedSale> {
                                   leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
                                   title: Text(snapshot.data[index].name),
                                   trailing:Text(snapshot.data[index].price.toString()+' so\'m'),
-                                  subtitle:Text(snapshot.data[index].quantity.toString()+' dona'),
+                                  subtitle:Text(snapshot.data[index].quantity.toString()+' dona (1 dona uchun '+snapshot.data[index].priceForEach+' so\'mdan sotilgan)'),
                                 ),
                               ),
 
@@ -86,7 +86,8 @@ class _FinishedSaleState extends State<FinishedSale> {
                 },
               ),
             ),
-            TitleWithMoreBtn(title: "Umumiy savdo summasi: ",value:widget.sum, press: () {}),
+            Padding(padding: EdgeInsets.only(top: 30)),
+            TitleWithMoreBtn(title: "Umumiy savdo summasi: ",value:widget.sum+ ' so\'m', press: () {}),
           ],
         ),
       )
@@ -125,7 +126,7 @@ class TitleWithMoreBtn extends StatelessWidget {
             color: Color(0xFF0C9869),
             onPressed: press,
             child: Text(
-              value+' so\'m',
+              value,
               style: TextStyle(color: Colors.white),
             ),
           ),

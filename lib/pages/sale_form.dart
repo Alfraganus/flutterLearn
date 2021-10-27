@@ -12,11 +12,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
 
+import 'finishedSale.dart';
 import 'homepage.dart';
 
 dynamic product = 'Search a product';
 String product_id = '';
-String product_name = '';
+String product_name = 'Maxsulot nomlari';
 dynamic test = '';
 List<Product> newproducts = [];
 String sharedPrefs;
@@ -65,11 +66,7 @@ class _ProductFormState extends State<ProductForm> {
   }
 
  void sendProducts() async {
-
- var response = await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: json.encoder.convert(newproducts));
-   // print(json.encoder.convert(newproducts));
-   print(newproducts);
-
+ await http.post(Uri.http('api.spector77.uz','rest/sales/test'), body: json.encoder.convert(newproducts));
   }
 
   @override
@@ -82,8 +79,9 @@ class _ProductFormState extends State<ProductForm> {
       Column(
         children: [
           Padding(padding:  EdgeInsets.all(16)),
-      Text('Pruduct price: '+product_price+' so\'m'),
-      Text('Product quantity left: '+leftquantity),
+          TitleWithMoreBtn(title: "Maxsulot narxi: ",value: product_price, press: () {}),
+          Padding(padding:  EdgeInsets.only(top: 15)),
+          TitleWithMoreBtn(title: "Qoldiq: ",value: leftquantity, press: () {}),
           SafeArea(
             child: Container(
               padding: EdgeInsets.all(16),
@@ -92,17 +90,19 @@ class _ProductFormState extends State<ProductForm> {
                 textFieldConfiguration: TextFieldConfiguration(
                   controller: productController,
                   decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
-                    hintText: product,
+                    icon: Icon(Icons.list),
+                    labelText:product_name??'Maxsulot tanlang!',
+                    labelStyle: TextStyle(
+                      color: Color(0xFF6200EE),
+                    ),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Color(0xFF6200EE)),
+                    ),
                   ),
-
                 ),
-
                 suggestionsCallback: UserApi.getUserSuggestions,
                 itemBuilder: (context, User suggestion) {
                   final user = suggestion;
-
                   return ListTile(
                     title: Text(user.name),
                   );
@@ -111,7 +111,7 @@ class _ProductFormState extends State<ProductForm> {
                   height: 100,
                   child: Center(
                     child: Text(
-                      'No Users Found.',
+                      'Maxsulot tanlanilmadi!',
                       style: TextStyle(fontSize: 24),
                     ),
                   ),
@@ -122,8 +122,8 @@ class _ProductFormState extends State<ProductForm> {
                   setState(() {
                     product_name = product = '${user.name}';
                     product_id = '${user.id}';
-                    product_price = '${user.price}';
-                    leftquantity ='${user.leftquantity}';
+                    product_price = '${user.price} so\'m';
+                    leftquantity ='${user.leftquantity} dona';
                   });
                   ScaffoldMessenger.of(context)
                     ..removeCurrentSnackBar()
@@ -141,10 +141,15 @@ class _ProductFormState extends State<ProductForm> {
             controller: quantityController,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.all(16),
-                border: OutlineInputBorder(),
-                hintText: 'Enter quantity'
+            decoration: InputDecoration(
+              icon: Icon(Icons.assignment),
+              labelText: 'Sotilayotgan miqdor',
+              labelStyle: TextStyle(
+                color: Color(0xFF6200EE),
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF6200EE)),
+              ),
             ),
           ),
         ),
@@ -156,29 +161,41 @@ class _ProductFormState extends State<ProductForm> {
                 controller: priceController,
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(
-                    contentPadding: EdgeInsets.all(16),
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter price'
+                decoration: InputDecoration(
+                  icon: Icon(Icons.money),
+                  labelText: 'Sotilayotgan Narx',
+                  labelStyle: TextStyle(
+                    color: Color(0xFF6200EE),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xFF6200EE)),
+                  ),
                 ),
 
               ),
             ),
           ),
-          TextButton(
-            onPressed: () {
-             if(product_id =='' || quantityController.text ==''  || priceController.text =='' ) {
-               return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
-             } else {
-               addItemToList();
-               product_id='';
-               product = 'Search a product';
-               quantityController.text='';
-               priceController.text='';
 
-            }
-            },
-            child: Text('Send'),
+          CircleAvatar(
+            backgroundColor: Colors.blue,
+            radius: 20,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: Icon(Icons.add),
+              color: Colors.white,
+              onPressed: () {
+                if(product_id =='' || quantityController.text ==''  || priceController.text =='' ) {
+                  return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
+                } else {
+                  addItemToList();
+                  product_id='';
+                  product = 'Search a product';
+                  quantityController.text='';
+                  priceController.text='';
+
+                }
+              },
+            ),
           ),
           Flexible(
             child:SingleChildScrollView(
@@ -218,7 +235,13 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ) ,
           ),
-          newproducts.length>0? TextButton(
+          newproducts.length>0 ? ElevatedButton.icon(
+            icon: Icon(
+              Icons.add_shopping_cart,
+              color: Colors.white,
+              size: 34.0,
+            ),
+            label: Text('Savdoni amalga oshirish'),
             onPressed: () {
               if(_checkInternetConnection() !=200 ) {
                 sendProducts();
@@ -230,9 +253,12 @@ class _ProductFormState extends State<ProductForm> {
               } else {
                 _showDialog('Xatolik bor!','Internet mavjud emas!');
               }
-
             },
-            child: Text('Send to API'),
+            style: ElevatedButton.styleFrom(
+              shape: new RoundedRectangleBorder(
+                borderRadius: new BorderRadius.circular(20.0),
+              ),
+            ),
           ) :Text('')
         ],
       ),
