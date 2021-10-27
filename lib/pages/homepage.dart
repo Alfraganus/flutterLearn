@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => FinishedSale(id:snapshot.data[index].Id)),
+                                        builder: (context) => FinishedSale(id:snapshot.data[index].Id,sum:snapshot.data[index].overall_sale ,)),
                                   );
                                 },
                                    leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
@@ -107,6 +107,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+
+
 
 
 
