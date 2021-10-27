@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app/main.dart';
@@ -11,7 +9,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:connectivity/connectivity.dart';
-
 import 'finishedSale.dart';
 import 'homepage.dart';
 
@@ -189,10 +186,11 @@ class _ProductFormState extends State<ProductForm> {
                 } else {
                   addItemToList();
                   product_id='';
-                  product = 'Search a product';
+                  product_name ='Maxsulot nomlari';
                   quantityController.text='';
                   priceController.text='';
-
+                  product_price='';
+                  leftquantity ='';
                 }
               },
             ),
@@ -206,8 +204,11 @@ class _ProductFormState extends State<ProductForm> {
                     return Container(
                       child: Card(
                         child:ListTile(
-                          title: Text(personone.product_name),
-                          subtitle: Text(personone.price + "\n" + personone.quantity),
+                          title: Text("Nomi: "+personone.product_name,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16)),
+                          subtitle: Text("Narxi: "+personone.price + "so\'m \n" +
+                              "Sanog\'i: "+personone.quantity+" dona",
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)
+                          ),
                           trailing: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 primary: Colors.redAccent
@@ -243,15 +244,16 @@ class _ProductFormState extends State<ProductForm> {
             ),
             label: Text('Savdoni amalga oshirish'),
             onPressed: () {
-              if(_checkInternetConnection() !=200 ) {
+              if(_checkInternetConnection() ==200 ) {
+                _showDialog('Xatolik bor!','Internet mavjud emas!');
+              } else {
                 sendProducts();
                 emptyDatas();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MyApp()),
                 );
-              } else {
-                _showDialog('Xatolik bor!','Internet mavjud emas!');
+
               }
             },
             style: ElevatedButton.styleFrom(
