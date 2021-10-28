@@ -27,6 +27,8 @@ Future<List<Sales>> fetchAlbum() async {
 }
 
 
+
+
 class MyHomePage extends StatefulWidget {
   final String title;
   MyHomePage({Key key, this.title}) :super (key: key);
@@ -54,31 +56,34 @@ class _MyHomePageState extends State<MyHomePage> {
               return Column(
                 children: [
                   Expanded(
-                    child: ListView.builder(
-                        itemCount: snapshot.data.length,
-                        // physics: Scrollable.of(context),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Card(
-                                  child: ListTile(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => FinishedSale(id:snapshot.data[index].Id,sum:snapshot.data[index].overall_sale ,)),
-                                  );
-                                },
-                                   leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
-                                    title: Text(snapshot.data[index].name),
-                                    subtitle:Text(snapshot.data[index].time.toString()),
-                                    trailing:Text(snapshot.data[index].overall_sale.toString()+' so\'m'),
-                                  )
-                              ),
-                            ],
-                          );
-                        }
+                    child: RefreshIndicator(
+                      onRefresh: fetchAlbum,
+                      child: ListView.builder(
+                          itemCount: snapshot.data.length,
+                          // physics: Scrollable.of(context),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Card(
+                                    child: ListTile(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => FinishedSale(id:snapshot.data[index].Id,sum:snapshot.data[index].overall_sale ,)),
+                                    );
+                                  },
+                                     leading:Image.network('https://thumbs.dreamstime.com/b/medal-green-icon-approved-certified-isolated-white-background-flat-design-vector-illustration-148951474.jpg'),
+                                      title: Text(snapshot.data[index].name),
+                                      subtitle:Text(snapshot.data[index].time.toString()),
+                                      trailing:Text(snapshot.data[index].overall_sale.toString()+' so\'m'),
+                                    )
+                                ),
+                              ],
+                            );
+                          }
+                      ),
                     ),
                   ),
                 ],
