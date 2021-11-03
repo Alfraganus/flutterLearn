@@ -27,8 +27,6 @@ void emptyDatas()
   newproducts =[];
 }
 
-
-
 class ProductForm extends StatefulWidget {
   @override
   _ProductFormState createState() => _ProductFormState();
@@ -40,16 +38,13 @@ class _ProductFormState extends State<ProductForm> {
   TextEditingController quantityController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
-    _checkInternetConnection();
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs.get('token'));
     });
   }
-
 
   void addItemToList() {
     setState(() {
@@ -168,11 +163,9 @@ class _ProductFormState extends State<ProductForm> {
                     borderSide: BorderSide(color: Color(0xFF6200EE)),
                   ),
                 ),
-
               ),
             ),
           ),
-
           CircleAvatar(
             backgroundColor: Colors.blue,
             radius: 20,
@@ -197,7 +190,6 @@ class _ProductFormState extends State<ProductForm> {
                       leftquantity ='';
                     }
                   }
-
               },
             ),
           ),
@@ -272,7 +264,6 @@ class _ProductFormState extends State<ProductForm> {
       ),
     );
   }
-
   _showDialog(title,text) {
     showDialog(
       context: context,
@@ -280,22 +271,10 @@ class _ProductFormState extends State<ProductForm> {
         return   AlertDialog(
           title: Text(title),
           content: Text(text),
-        );;
+        );
       },
     );
   }
-
-  _checkInternetConnection() async {
-    var result = await Connectivity().checkConnectivity();
-    if(result == ConnectivityResult.none) {
-      test = 'internet yooq';
-    }  else {
-      test = 'internet boooor';
-    }
-
-  }
-
-
 }
 
 
