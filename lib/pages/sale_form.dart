@@ -44,7 +44,7 @@ class _ProductFormState extends State<ProductForm> {
   @override
   void initState() {
     super.initState();
-
+    _checkInternetConnection();
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs.get('token'));
     });
@@ -180,18 +180,24 @@ class _ProductFormState extends State<ProductForm> {
               padding: EdgeInsets.zero,
               icon: Icon(Icons.add),
               color: Colors.white,
-              onPressed: () {
-                if(product_id =='' || quantityController.text ==''  || priceController.text =='' ) {
-                  return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
-                } else {
-                  addItemToList();
-                  product_id='';
-                  product_name ='Maxsulot nomlari';
-                  quantityController.text='';
-                  priceController.text='';
-                  product_price='';
-                  leftquantity ='';
-                }
+              onPressed: () async {
+                var internet = await Connectivity().checkConnectivity();
+                  if(internet==ConnectivityResult.none || internet=='ConnectivityResult.none') {
+                    _showDialog('Xatolik bor','Internet mavjud emas!');
+                  } else {
+                    if(product_id =='' || quantityController.text ==''  || priceController.text =='' ) {
+                      return   _showDialog('Xatolik bor!','Barcha maydonlar toldirilishi shart!');
+                    } else {
+                      addItemToList();
+                      product_id='';
+                      product_name ='Maxsulot nomlari';
+                      quantityController.text='';
+                      priceController.text='';
+                      product_price='';
+                      leftquantity ='';
+                    }
+                  }
+
               },
             ),
           ),
@@ -236,24 +242,24 @@ class _ProductFormState extends State<ProductForm> {
               ),
             ) ,
           ),
-          newproducts.length>0 ? ElevatedButton.icon(
+          newproducts.length > 0 ? ElevatedButton.icon(
             icon: Icon(
               Icons.add_shopping_cart,
               color: Colors.white,
               size: 34.0,
             ),
             label: Text('Savdoni amalga oshirish'),
-            onPressed: () {
-              if(_checkInternetConnection() ==200 ) {
-                _showDialog('Xatolik bor!','Internet mavjud emas!');
-              } else {
+            onPressed: () async {
+              var internet = await Connectivity().checkConnectivity();
+              if(internet==ConnectivityResult.none || internet=='ConnectivityResult.none') {
+                _showDialog('Xatolik bor','Internet mavjud emas!');
+              }  else {
                 sendProducts();
                 emptyDatas();
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => MyApp()),
                 );
-
               }
             },
             style: ElevatedButton.styleFrom(
@@ -282,9 +288,9 @@ class _ProductFormState extends State<ProductForm> {
   _checkInternetConnection() async {
     var result = await Connectivity().checkConnectivity();
     if(result == ConnectivityResult.none) {
-      return 200;
+      test = 'internet yooq';
     }  else {
-      return 404;
+      test = 'internet boooor';
     }
 
   }
